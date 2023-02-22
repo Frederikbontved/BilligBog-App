@@ -4,49 +4,53 @@ import {
   Text,
   FlatList,
   StyleSheet,
-  Image,
-  TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
+import ListItem from "../components/ListItem";
+import FloatingScanButton from "../components/FloatingScanButton";
 
-const Item = ({ isbn, title, authors }) => (
-  <View style={styles.item}>
-    <Image
-      style={styles.coverImg}
-      source={{
-        uri: "http://192.168.8.108:3333/images/" + isbn + ".jpeg",
-      }}
-    />
-    <View style={styles.bookInfo}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.authors}>{authors}</Text>
-    </View>
-  </View>
-);
-
-export function Booklist({ navigation }) {
+export function Booklist({ route, navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
-  const url = "http://192.168.8.108:3333/books/";
-
   // Get all books in DB.
   const getBooks = async () => {
+    if (isLoading) {
+      try {
+        const url = "http://134.122.92.30/books/";
+
+        const response = await fetch(url);
+        const json = await response.json();
+        setData(json);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  // Delete a book
+  const deleteBook = async (isbn) => {
     try {
-      const response = await fetch(url);
+      const response = await fetch(`http://134.122.92.30/books/${isbn}`, {
+        method: "DELETE",
+      });
       const json = await response.json();
       console.log(json);
-      setData(json);
+      setLoading(true);
     } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
+      console.error(err);
     }
   };
 
   useEffect(() => {
     getBooks();
-  }, []);
+  }, [isLoading]);
+
+  useEffect(() => {
+    setLoading(true);
+  }, [route.params]);
 
   return (
     <View style={styles.container}>
@@ -57,16 +61,22 @@ export function Booklist({ navigation }) {
           data={data}
           keyExtractor={({ isbn }) => isbn}
           renderItem={({ item }) => (
-            <Item isbn={item.isbn} title={item.title} authors={item.authors} />
+            <ListItem
+              isbn={item.isbn}
+              title={item.title}
+              authors={item.authors}
+              deleteBook={deleteBook}
+            />
           )}
+          ListEmptyComponent={
+            <Text style={styles.empty}>
+              Der er endnu ingen bøger i databasen. Tilføj én ved at trykke på
+              knappen nederst til højre.
+            </Text>
+          }
         />
       )}
-      <TouchableOpacity
-        style={styles.floatingButton}
-        onPress={() => navigation.navigate("Scanner")}
-      >
-        <Text style={styles.floatingButtonText}>Add book</Text>
-      </TouchableOpacity>
+      <FloatingScanButton navigation={navigation} />
     </View>
   );
 }
@@ -75,38 +85,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  item: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    flex: 1,
-    flexDirection: "row",
-  },
-  bookInfo: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 32,
-  },
-  coverImg: {
-    width: 78,
-    height: 110,
-  },
-  floatingButton: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "#ee6e73",
-    position: "absolute",
-    bottom: 10,
-    right: 10,
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  floatingButtonText: {
-    fontWeight: "bold",
-    color: "white",
+  empty: {
+    fontSize: 20,
+    margin: 16,
   },
 });

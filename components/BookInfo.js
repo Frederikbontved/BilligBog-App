@@ -1,21 +1,18 @@
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 export function BookInfo({ book, navigation }) {
-  console.log(book);
-
   const title = book.title;
   const isbn = book.isbn;
   const coverImg = book.coverImg;
 
   let authors = "";
   book.authors.forEach((element) => {
-    console.log(element);
     authors += element;
   });
 
   const addBook = async () => {
     try {
-      fetch("http://192.168.8.108:3333/books", {
+      fetch("http://134.122.92.30/books", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -32,7 +29,11 @@ export function BookInfo({ book, navigation }) {
       console.error(err);
     }
 
-    navigation.navigate("Booklist");
+    navigation.navigate("Booklist", {
+      params: {
+        itemAdded: true,
+      },
+    });
   };
 
   return (

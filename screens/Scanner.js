@@ -43,22 +43,62 @@ export function Scanner({ navigation }) {
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
+      <View style={styles.layerTop} />
+      <View style={styles.layerCenter}>
+        <View style={styles.layerLeft} />
+        <View style={styles.focused} />
+        <View style={styles.layerRight} />
+      </View>
+      <View style={styles.layerBottom}>
+        <Text style={styles.helperText}>
+          Placer bogens stregkode indenfor feltet.
+        </Text>
+      </View>
       <BookPopup
         visible={scanned}
         isbn={isbn}
         closePopup={closePopup}
         navigation={navigation}
       />
-      {scanned && console.log("Scanned, with ISBN: " + isbn)}
     </View>
   );
 }
 
+const opacity = "rgba(0, 0, 0, .7)";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    flexDirection: "column",
+  },
+  layerTop: {
+    flex: 2,
+    backgroundColor: opacity,
+  },
+  layerCenter: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  layerLeft: {
+    flex: 1,
+    backgroundColor: opacity,
+  },
+  focused: {
+    flex: 10,
+    borderWidth: 1,
+    borderColor: "white",
+  },
+  layerRight: {
+    flex: 1,
+    backgroundColor: opacity,
+  },
+  layerBottom: {
+    flex: 2,
+    backgroundColor: opacity,
     alignItems: "center",
     justifyContent: "center",
+  },
+  helperText: {
+    color: "white",
+    fontSize: 16,
   },
 });

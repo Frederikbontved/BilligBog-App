@@ -14,8 +14,16 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Booklist">
-        <Stack.Screen name="Booklist" component={Booklist} />
-        <Stack.Screen name="Scanner" component={Scanner} />
+        <Stack.Screen
+          name="Booklist"
+          component={Booklist}
+          options={{ title: "Alle bøger" }}
+        />
+        <Stack.Screen
+          name="Scanner"
+          component={Scanner}
+          options={{ title: "Tilføj bog" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

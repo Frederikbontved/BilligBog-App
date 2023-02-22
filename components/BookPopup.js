@@ -14,7 +14,7 @@ export function BookPopup({ isbn, visible, closePopup, navigation }) {
   const [isFound, setFound] = useState(false);
   const [data, setData] = useState([]);
 
-  const url = "http://192.168.8.108:3333/scrape/";
+  const url = "http://134.122.92.30/scrape/";
 
   // Find a book from scraper
   const getBook = async () => {
@@ -35,6 +35,7 @@ export function BookPopup({ isbn, visible, closePopup, navigation }) {
     }
   };
 
+  // Scrape for a book when "visible" changes to true.
   useEffect(() => {
     getBook();
   }, [visible]);
