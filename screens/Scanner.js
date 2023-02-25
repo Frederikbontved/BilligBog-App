@@ -1,23 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { BookPopup } from "../components/BookPopup";
+import { useFocusEffect } from "@react-navigation/native";
 
 export function Scanner({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
 
+  // WHAT HAPPENS IF WE REMOVE THIS STATE COMPLETELY?
   const [scanned, setScanned] = useState(false);
-  const [isbn, setIsbn] = useState(null);
 
-  const closePopup = () => {
-    setScanned(false);
-    setIsbn(null);
-  };
+  // Reset the "scanned" state when the screen goes into view again after having been out.
+  useFocusEffect(
+    useCallback(() => {
+      setScanned(false);
+    }, [])
+  );
 
   // Callback for when a barcode has been scanned.
   const handleBarCodeScanned = async ({ type, data }) => {
-    setIsbn(data);
     setScanned(true);
+    navigation.navigate("AddBook", {
+      isbn: data,
+    });
   };
 
   // Check and ask for Camera permissions for barcode scanner
@@ -33,6 +37,7 @@ export function Scanner({ navigation }) {
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
   }
+
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
@@ -51,15 +56,9 @@ export function Scanner({ navigation }) {
       </View>
       <View style={styles.layerBottom}>
         <Text style={styles.helperText}>
-          Placer bogens stregkode indenfor feltet.
+          Placér bogens stregkode inden for feltet.
         </Text>
       </View>
-      <BookPopup
-        visible={scanned}
-        isbn={isbn}
-        closePopup={closePopup}
-        navigation={navigation}
-      />
     </View>
   );
 }
