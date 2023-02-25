@@ -83,13 +83,18 @@ export default function AddBook({ route, navigation }) {
             >
               <Text style={styles.buttonText}>Scan igen</Text>
             </TouchableOpacity>
-            {found && (
+            {found && !data._id ? (
               <TouchableOpacity
                 style={styles.button}
+                x
                 onPress={() => addBook(data)}
               >
                 <Text style={styles.buttonText}>Tilføj bog</Text>
               </TouchableOpacity>
+            ) : (
+              <Text style={{ flex: 1, alignSelf: "center" }}>
+                Bogen findes allerede i databasen.
+              </Text>
             )}
           </View>
         </View>
