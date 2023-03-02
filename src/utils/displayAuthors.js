@@ -1,22 +1,5 @@
-const url = "http://192.168.8.108:3333/";
-
-// Get all
-async function getBooks(stopLoading) {
-  try {
-    const response = await fetch(url + "books/");
-    const json = await response.json();
-
-    //console.log(json);
-
-    return json;
-  } catch (err) {
-    console.error(err);
-  } finally {
-    stopLoading();
-  }
-}
-
-function constructAuthors(arr) {
+// Take the authors array and construct a readable string with spaces, commas and an ampersand.
+export default function constructAuthors(arr) {
   if (arr.length === 1) {
     return arr[0];
   } else if (arr.length === 2) {
@@ -36,5 +19,3 @@ function constructAuthors(arr) {
     return result + ".";
   }
 }
-
-module.exports = { getBooks, constructAuthors };

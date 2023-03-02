@@ -1,6 +1,6 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { constructAuthors } from "../utils/utils";
+import displayAuthors from "../utils/displayAuthors";
 
 export default function ListItem({ isbn, title, authors, deleteBook }) {
   return (
@@ -15,7 +15,7 @@ export default function ListItem({ isbn, title, authors, deleteBook }) {
       </View>
       <View style={styles.meta}>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.authors}>{constructAuthors(authors)}</Text>
+        <Text style={styles.authors}>{displayAuthors(authors)}</Text>
       </View>
       <View style={styles.deleteButton}>
         <MaterialCommunityIcons

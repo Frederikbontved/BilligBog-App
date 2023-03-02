@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import BookInfo from "../components/BookInfo";
+import BookInfo from "../../components/BookInfo";
 
 export default function AddBook({ route, navigation }) {
   const [loading, setLoading] = useState(true);
