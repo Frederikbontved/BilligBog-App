@@ -1,13 +1,11 @@
 import { Text, View, StyleSheet, Image } from "react-native";
+import { constructAuthors } from "../utils/utils";
 
 export default function BookInfo({ book }) {
   const title = book.title;
   const isbn = book.isbn;
   const coverImg = book.coverImg;
-  let authors = "";
-  book.authors.forEach((element) => {
-    authors += element;
-  });
+  const authors = constructAuthors(book.authors);
 
   return (
     <View style={styles.container}>

@@ -86,7 +86,6 @@ export default function AddBook({ route, navigation }) {
             {found && !data._id ? (
               <TouchableOpacity
                 style={styles.button}
-                x
                 onPress={() => addBook(data)}
               >
                 <Text style={styles.buttonText}>Tilføj bog</Text>
